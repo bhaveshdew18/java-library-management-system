@@ -73,6 +73,23 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     public boolean returnBook(String isbn, int copies) {
+        if(isbn == null){
+            return false;
+        }
+        if(isbn.isBlank()){
+            return false;
+        }
+        if(copies <= 0){
+            return false;
+        }
+        Optional<Book> result = repository.findByIsbn(isbn);
+        if(result.isPresent()){
+            Book book = result.get();
+            if(!book.returnBook(copies)) {
+                return false;
+            }
+            return repository.update(book);
+        }
         return false;
     }
 }
