@@ -36,7 +36,13 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     public Optional<Book> searchBook(String isbn) {
-        return Optional.empty();
+        if(isbn == null){
+            return Optional.empty();
+        }
+        if(isbn.isBlank()){
+            return Optional.empty();
+        }
+        return repository.findByIsbn(isbn);
     }
 
     @Override
