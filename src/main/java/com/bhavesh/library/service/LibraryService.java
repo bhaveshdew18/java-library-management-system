@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LibraryService {
-    void addBook(Book book);
+    boolean addBook(Book book);
 
     Optional<Book> searchBook(String isbn);
 
