@@ -15,7 +15,23 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     public boolean addBook(Book book) {
+        if(book == null){
+            return false;
+        }
+        if(book.getIsbn().isBlank()){
+            return false;
+        }
+        if(book.getTitle().isBlank()){
+            return false;
+        }
+        if(book.getAuthor().isBlank()){
+            return false;
+        }
+        if(book.getQuantity() < 0) {
+            return false;
+        }
 
+        return repository.save(book);
     }
 
     @Override
