@@ -47,11 +47,27 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     public List<Book> getAllBooks() {
-        return List.of();
+        return repository.findAll();
     }
 
     @Override
     public boolean borrowBook(String isbn) {
+        if(isbn == null){
+            return false;
+        }
+        if(isbn.isBlank()){
+            return false;
+        }
+
+        Optional<Book> result = repository.findByIsbn(isbn);
+        if(result.isPresent()){
+            Book book = result.get();
+            if(!book.borrowBook()) {
+                return false;
+            }
+            return repository.update(book);
+        }
+
         return false;
     }
 
