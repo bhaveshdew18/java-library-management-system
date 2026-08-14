@@ -9,9 +9,10 @@ import java.util.Optional;
 
 public class InMemoryBookRepository implements BookRepository
 {
-    private final List<Book> books = new ArrayList<>();
+    private final List<Book> books;
 
-    public InMemoryBookRepository() {
+    public InMemoryBookRepository(List<Book> books) {
+        this.books = new ArrayList<>(books);
     }
 
     @Override
