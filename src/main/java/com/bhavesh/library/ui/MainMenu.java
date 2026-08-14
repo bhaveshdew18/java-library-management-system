@@ -35,8 +35,9 @@ public class MainMenu {
     }
 
     private int readChoice() {
-        return scanner.nextInt();
-
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+        return choice;
     }
 
     private boolean handleChoice(int choice) {
@@ -82,10 +83,17 @@ public class MainMenu {
                 return true;
 
             case 5:
-                String title = scanner.next();
-                String author = scanner.next();
-                isbn = scanner.next();
-                int quantity = scanner.nextInt();
+                String title = scanner.nextLine();
+                String author = scanner.nextLine();
+                isbn = scanner.nextLine();
+                int quantity;
+                if (scanner.hasNextInt()) {
+                    quantity = scanner.nextInt();
+                } else {
+                    scanner.nextLine();
+                    System.out.println("Invalid input.");
+                    return true;
+                }
                 Book newBook = new Book(title, author, isbn, quantity);
                 if(libraryService.addBook(newBook)) {
                     System.out.println("Book added successfully.");

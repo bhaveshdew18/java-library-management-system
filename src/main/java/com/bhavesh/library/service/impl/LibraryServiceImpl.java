@@ -27,7 +27,7 @@ public class LibraryServiceImpl implements LibraryService {
         if(book.getAuthor().isBlank()){
             return false;
         }
-        if(book.getQuantity() < 0) {
+        if(book.getQuantity() <= 0) {
             return false;
         }
 
