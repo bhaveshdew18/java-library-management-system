@@ -2,7 +2,10 @@ package com.bhavesh.library.service.impl;
 
 import com.bhavesh.library.model.Book;
 import com.bhavesh.library.repository.BookRepository;
+import com.bhavesh.library.service.AddBookResult;
+import com.bhavesh.library.service.BorrowBookResult;
 import com.bhavesh.library.service.LibraryService;
+import com.bhavesh.library.service.ReturnBookResult;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,24 +17,44 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public boolean addBook(Book book) {
-        if(book == null){
-            return false;
-        }
-        if(book.getIsbn().isBlank()){
-            return false;
-        }
-        if(book.getTitle().isBlank()){
-            return false;
-        }
-        if(book.getAuthor().isBlank()){
-            return false;
-        }
-        if(book.getQuantity() <= 0) {
-            return false;
+    public AddBookResult addBook(Book book) {
+
+        // Validate book object
+        if (book == null) {
+            return AddBookResult.INVALID_BOOK;
         }
 
-        return repository.save(book);
+        // Validate ISBN
+        if (book.getIsbn().isBlank()) {
+            return AddBookResult.INVALID_BOOK;
+        }
+
+        // Validate title
+        if (book.getTitle().isBlank()) {
+            return AddBookResult.INVALID_BOOK;
+        }
+
+        // Validate author
+        if (book.getAuthor().isBlank()) {
+            return AddBookResult.INVALID_BOOK;
+        }
+
+        // Quantity must be greater than 0
+        if (book.getQuantity() <= 0) {
+            return AddBookResult.INVALID_BOOK;
+        }
+
+        // Check for duplicate ISBN
+        if (repository.findByIsbn(book.getIsbn()).isPresent()) {
+            return AddBookResult.DUPLICATE_ISBN;
+        }
+
+        // Save the book
+        if (repository.save(book)) {
+            return AddBookResult.SUCCESS;
+        }
+
+        return AddBookResult.SAVE_FAILED;
     }
 
     @Override
@@ -51,45 +74,58 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public boolean borrowBook(String isbn) {
+    public BorrowBookResult borrowBook(String isbn) {
         if(isbn == null){
-            return false;
+            return BorrowBookResult.INVALID_ISBN;
         }
         if(isbn.isBlank()){
-            return false;
+            return BorrowBookResult.INVALID_ISBN;
         }
 
         Optional<Book> result = repository.findByIsbn(isbn);
         if(result.isPresent()){
             Book book = result.get();
             if(!book.borrowBook()) {
-                return false;
+                return BorrowBookResult.OUT_OF_STOCK;
             }
-            return repository.update(book);
+            if (repository.update(book)) {
+                return BorrowBookResult.SUCCESS;
+            }
+
+            return BorrowBookResult.UPDATE_FAILED;
         }
 
-        return false;
+        return BorrowBookResult.BOOK_NOT_FOUND;
     }
 
     @Override
-    public boolean returnBook(String isbn, int copies) {
-        if(isbn == null){
-            return false;
+    public ReturnBookResult returnBook(String isbn, int copies) {
+        if (isbn == null) {
+            return ReturnBookResult.INVALID_ISBN;
         }
-        if(isbn.isBlank()){
-            return false;
+
+        if (isbn.isBlank()) {
+            return ReturnBookResult.INVALID_ISBN;
         }
-        if(copies <= 0){
-            return false;
+
+        if (copies <= 0) {
+            return ReturnBookResult.INVALID_COPIES;
         }
+
         Optional<Book> result = repository.findByIsbn(isbn);
-        if(result.isPresent()){
+
+        if (result.isPresent()) {
             Book book = result.get();
-            if(!book.returnBook(copies)) {
-                return false;
+
+            book.returnBook(copies);
+
+            if (repository.update(book)) {
+                return ReturnBookResult.SUCCESS;
             }
-            return repository.update(book);
+
+            return ReturnBookResult.UPDATE_FAILED;
         }
-        return false;
+
+        return ReturnBookResult.BOOK_NOT_FOUND;
     }
 }

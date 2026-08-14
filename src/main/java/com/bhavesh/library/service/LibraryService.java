@@ -6,14 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LibraryService {
-    boolean addBook(Book book);
+    AddBookResult addBook(Book book);
 
     Optional<Book> searchBook(String isbn);
 
     List<Book> getAllBooks();
 
-    boolean borrowBook(String isbn);
+    BorrowBookResult borrowBook(String isbn);
 
-    boolean returnBook(String isbn, int copies);
-
+    ReturnBookResult returnBook(String isbn, int copies);
 }
