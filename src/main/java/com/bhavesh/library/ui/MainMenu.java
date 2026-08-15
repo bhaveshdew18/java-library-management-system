@@ -8,13 +8,13 @@ import com.bhavesh.library.service.ReturnBookResult;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
 
 public class MainMenu {
-    private final Scanner scanner = new Scanner(System.in);
+    private final ConsoleInput input;
     private final LibraryService libraryService;
 
-    public MainMenu(LibraryService libraryService) {
+    public MainMenu(LibraryService libraryService, ConsoleInput input) {
+        this.input = input;
         this.libraryService = libraryService;
     }
 
@@ -38,9 +38,7 @@ public class MainMenu {
     }
 
     private int readChoice() {
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-        return choice;
+      return input.readInt();
     }
 
     private boolean handleChoice(int choice) {
@@ -57,7 +55,7 @@ public class MainMenu {
                 return true;
 
             case 2:
-                String isbn = scanner.next();
+                String isbn = input.readLine();
                 Optional<Book> result = libraryService.searchBook(isbn);
                 if (result.isPresent()) {
                     System.out.println(result.get());
@@ -67,7 +65,7 @@ public class MainMenu {
                 return true;
 
             case 3:
-                isbn = scanner.next();
+                isbn = input.readLine();
                 BorrowBookResult borrowresult = libraryService.borrowBook(isbn);
                 switch (borrowresult) {
                     case SUCCESS:
@@ -93,8 +91,8 @@ public class MainMenu {
                 return true;
 
             case 4:
-                isbn = scanner.next();
-                int copies = scanner.nextInt();
+                isbn = input.readLine();
+                int copies = input.readInt();
 
                 ReturnBookResult returnResult = libraryService.returnBook(isbn, copies);
 
@@ -123,19 +121,10 @@ public class MainMenu {
                 return true;
 
             case 5:
-                String title = scanner.nextLine();
-                String author = scanner.nextLine();
-                isbn = scanner.nextLine();
-
-                int quantity;
-
-                if (scanner.hasNextInt()) {
-                    quantity = scanner.nextInt();
-                } else {
-                    scanner.nextLine();
-                    System.out.println("Invalid input.");
-                    return true;
-                }
+                String title = input.readLine();
+                String author = input.readLine();
+                isbn = input.readLine();
+                int quantity = input.readInt();
 
                 Book newBook = new Book(title, author, isbn, quantity);
 
