@@ -38,7 +38,7 @@ public class MainMenu {
     }
 
     private int readChoice() {
-      return input.readInt();
+      return input.readInt("Choose an option: ");
     }
 
     private boolean handleChoice(int choice) {
@@ -55,7 +55,7 @@ public class MainMenu {
                 return true;
 
             case 2:
-                String isbn = input.readLine();
+                String isbn = input.readLine("Enter ISBN: ");
                 Optional<Book> result = libraryService.searchBook(isbn);
                 if (result.isPresent()) {
                     System.out.println(result.get());
@@ -65,7 +65,7 @@ public class MainMenu {
                 return true;
 
             case 3:
-                isbn = input.readLine();
+                isbn = input.readLine("Enter ISBN: ");
                 BorrowBookResult borrowresult = libraryService.borrowBook(isbn);
                 switch (borrowresult) {
                     case SUCCESS:
@@ -91,8 +91,8 @@ public class MainMenu {
                 return true;
 
             case 4:
-                isbn = input.readLine();
-                int copies = input.readInt();
+                isbn = input.readLine("Enter ISBN: ");
+                int copies = input.readInt("Enter copies: ");
 
                 ReturnBookResult returnResult = libraryService.returnBook(isbn, copies);
 
@@ -121,10 +121,10 @@ public class MainMenu {
                 return true;
 
             case 5:
-                String title = input.readLine();
-                String author = input.readLine();
-                isbn = input.readLine();
-                int quantity = input.readInt();
+                String title = input.readLine("Enter title.");
+                String author = input.readLine("Enter author.");
+                isbn = input.readLine("Enter ISBN.");
+                int quantity = input.readInt("Enter quantity.");
 
                 Book newBook = new Book(title, author, isbn, quantity);
 
