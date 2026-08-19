@@ -46,6 +46,14 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
+    public List<Book> searchByTitle(String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            return List.of();
+        }
+        return repository.findByTitle(keyword);
+    }
+
+    @Override
     public BorrowBookResult borrowBook(String isbn) {
         if(isbn == null){
             return BorrowBookResult.INVALID_ISBN;
@@ -99,5 +107,18 @@ public class LibraryServiceImpl implements LibraryService {
         }
 
         return ReturnBookResult.BOOK_NOT_FOUND;
+    }
+
+    @Override
+    public DeleteBookResult deleteBook(String isbn) {
+        if (isbn == null || isbn.isBlank()) {
+            return DeleteBookResult.INVALID_ISBN;
+        }
+
+        if (repository.findByIsbn(isbn).isEmpty()) {
+            return DeleteBookResult.BOOK_NOT_FOUND;
+        }
+
+        return repository.delete(isbn) ? DeleteBookResult.SUCCESS : DeleteBookResult.DELETE_FAILED;
     }
 }

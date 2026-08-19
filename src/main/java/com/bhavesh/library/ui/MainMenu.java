@@ -4,6 +4,7 @@ import com.bhavesh.library.exception.InvalidBookException;
 import com.bhavesh.library.model.Book;
 import com.bhavesh.library.service.AddBookResult;
 import com.bhavesh.library.service.BorrowBookResult;
+import com.bhavesh.library.service.DeleteBookResult;
 import com.bhavesh.library.service.LibraryService;
 import com.bhavesh.library.service.ReturnBookResult;
 
@@ -31,11 +32,13 @@ public class MainMenu {
 
     private void displayMenu() {
         System.out.println("1. Display Books");
-        System.out.println("2. Search Book");
+        System.out.println("2. Search Book by ISBN");
         System.out.println("3. Borrow Book");
         System.out.println("4. Return Book");
         System.out.println("5. Add Book");
-        System.out.println("6. Exit");
+        System.out.println("6. Delete Book");
+        System.out.println("7. Search Books by Title");
+        System.out.println("8. Exit");
     }
 
     private int readChoice() {
@@ -144,6 +147,31 @@ public class MainMenu {
                 return true;
 
             case 6:
+                isbn = input.readLine("Enter ISBN: ");
+                DeleteBookResult deleteResult = libraryService.deleteBook(isbn);
+
+                switch (deleteResult) {
+                    case SUCCESS -> System.out.println("Book deleted successfully.");
+                    case BOOK_NOT_FOUND -> System.out.println("Book not found.");
+                    case INVALID_ISBN -> System.out.println("Invalid ISBN.");
+                    case DELETE_FAILED -> System.out.println("Unable to delete book.");
+                }
+                return true;
+
+            case 7:
+                String keyword = input.readLine("Enter title keyword: ");
+                List<Book> matches = libraryService.searchByTitle(keyword);
+
+                if (matches.isEmpty()) {
+                    System.out.println("No books found.");
+                } else {
+                    for (Book book : matches) {
+                        System.out.println(book);
+                    }
+                }
+                return true;
+
+            case 8:
                 return false;
 
             default:

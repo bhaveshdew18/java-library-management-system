@@ -12,7 +12,11 @@ public interface LibraryService {
 
     List<Book> getAllBooks();
 
+    List<Book> searchByTitle(String keyword);
+
     BorrowBookResult borrowBook(String isbn);
 
     ReturnBookResult returnBook(String isbn, int copies);
+
+    DeleteBookResult deleteBook(String isbn);
 }
