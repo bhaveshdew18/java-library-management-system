@@ -42,6 +42,13 @@ public class InMemoryBookRepository implements BookRepository
     }
 
     @Override
+    public List<Book> findByTitle(String keyword) {
+        return books.stream()
+                .filter(book -> book.getTitle().toLowerCase().contains(keyword.toLowerCase()))
+                .toList();
+    }
+
+    @Override
     public boolean update(Book book) {
         for (int i = 0; i < books.size(); i++) {
             if (books.get(i).getIsbn().equals(book.getIsbn())) {

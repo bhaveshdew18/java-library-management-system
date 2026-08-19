@@ -12,6 +12,8 @@ public interface BookRepository {
 
     List<Book> findAll();
 
+    List<Book> findByTitle(String keyword);
+
     boolean update(Book book);
 
     boolean delete(String isbn);
