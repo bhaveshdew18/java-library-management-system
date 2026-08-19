@@ -1,5 +1,7 @@
 package com.bhavesh.library.model;
 
+import com.bhavesh.library.exception.InvalidBookException;
+
 public class Book {
     private  String title;
     private String author;
@@ -7,6 +9,20 @@ public class Book {
     private int quantity;
 
     public Book(String title, String author, String isbn, int quantity) {
+
+        if (title == null || title.isBlank()) {
+            throw new InvalidBookException("Title cannot be blank.");
+        }
+        if (author == null || author.isBlank()) {
+            throw new InvalidBookException("Author cannot be blank.");
+        }
+        if (isbn == null || isbn.isBlank()) {
+            throw new InvalidBookException("ISBN cannot be blank.");
+        }
+        if (quantity <= 0) {
+            throw new InvalidBookException("Quantity must be greater than zero.");
+        }
+
         this.title = title;
         this.author = author;
         this.isbn = isbn;

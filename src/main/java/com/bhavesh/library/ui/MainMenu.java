@@ -1,5 +1,6 @@
 package com.bhavesh.library.ui;
 
+import com.bhavesh.library.exception.InvalidBookException;
 import com.bhavesh.library.model.Book;
 import com.bhavesh.library.service.AddBookResult;
 import com.bhavesh.library.service.BorrowBookResult;
@@ -126,29 +127,22 @@ public class MainMenu {
                 isbn = input.readLine("Enter ISBN.");
                 int quantity = input.readInt("Enter quantity.");
 
-                Book newBook = new Book(title, author, isbn, quantity);
+                try {
+                    Book newBook = new Book(title, author, isbn, quantity);
+                    AddBookResult addResult = libraryService.addBook(newBook);
 
-                AddBookResult addResult = libraryService.addBook(newBook);
-
-                switch (addResult) {
-                    case SUCCESS:
-                        System.out.println("Book added successfully.");
-                        break;
-
-                    case INVALID_BOOK:
-                        System.out.println("Invalid book details.");
-                        break;
-
-                    case DUPLICATE_ISBN:
-                        System.out.println("A book with this ISBN already exists.");
-                        break;
-
-                    case SAVE_FAILED:
-                        System.out.println("Unable to save book.");
-                        break;
+                    switch (addResult) {
+                        case SUCCESS -> System.out.println("Book added successfully.");
+                        case DUPLICATE_ISBN -> System.out.println("A book with this ISBN already exists.");
+                        case SAVE_FAILED -> System.out.println("Unable to save book.");
+                        case INVALID_BOOK -> System.out.println("Invalid book details.");
+                    }
+                } catch (InvalidBookException e) {
+                    System.out.println("Could not add book: " + e.getMessage());
                 }
 
                 return true;
+
             case 6:
                 return false;
 

@@ -18,43 +18,15 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     public AddBookResult addBook(Book book) {
-
-        // Validate book object
         if (book == null) {
             return AddBookResult.INVALID_BOOK;
         }
 
-        // Validate ISBN
-        if (book.getIsbn().isBlank()) {
-            return AddBookResult.INVALID_BOOK;
-        }
-
-        // Validate title
-        if (book.getTitle().isBlank()) {
-            return AddBookResult.INVALID_BOOK;
-        }
-
-        // Validate author
-        if (book.getAuthor().isBlank()) {
-            return AddBookResult.INVALID_BOOK;
-        }
-
-        // Quantity must be greater than 0
-        if (book.getQuantity() <= 0) {
-            return AddBookResult.INVALID_BOOK;
-        }
-
-        // Check for duplicate ISBN
         if (repository.findByIsbn(book.getIsbn()).isPresent()) {
             return AddBookResult.DUPLICATE_ISBN;
         }
 
-        // Save the book
-        if (repository.save(book)) {
-            return AddBookResult.SUCCESS;
-        }
-
-        return AddBookResult.SAVE_FAILED;
+        return repository.save(book) ? AddBookResult.SUCCESS : AddBookResult.SAVE_FAILED;
     }
 
     @Override
