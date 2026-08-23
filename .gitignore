@@ -13,3 +13,6 @@ target/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Local configuration (contains real DB credentials — never commit)
+src/main/resources/application.properties

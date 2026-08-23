@@ -2,10 +2,7 @@ package com.bhavesh.library.service.impl;
 
 import com.bhavesh.library.model.Book;
 import com.bhavesh.library.repository.BookRepository;
-import com.bhavesh.library.service.AddBookResult;
-import com.bhavesh.library.service.BorrowBookResult;
-import com.bhavesh.library.service.LibraryService;
-import com.bhavesh.library.service.ReturnBookResult;
+import com.bhavesh.library.service.*;
 
 import java.util.List;
 import java.util.Optional;
