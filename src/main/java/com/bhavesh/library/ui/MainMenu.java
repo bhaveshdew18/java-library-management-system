@@ -72,25 +72,11 @@ public class MainMenu {
                 isbn = input.readLine("Enter ISBN: ");
                 BorrowBookResult borrowresult = libraryService.borrowBook(isbn);
                 switch (borrowresult) {
-                    case SUCCESS:
-                        System.out.println("Book borrowed successfully.");
-                        break;
-
-                    case BOOK_NOT_FOUND:
-                        System.out.println("Book not found.");
-                        break;
-
-                    case OUT_OF_STOCK:
-                        System.out.println("Book is out of stock.");
-                        break;
-
-                    case INVALID_ISBN:
-                        System.out.println("Invalid ISBN.");
-                        break;
-
-                    case UPDATE_FAILED:
-                        System.out.println("Unable to update book.");
-                        break;
+                    case SUCCESS -> System.out.println("Book borrowed successfully.");
+                    case BOOK_NOT_FOUND -> System.out.println("Book not found.");
+                    case OUT_OF_STOCK -> System.out.println("Book is out of stock.");
+                    case INVALID_ISBN -> System.out.println("Invalid ISBN.");
+                    case UPDATE_FAILED -> System.out.println("Unable to update book.");
                 }
                 return true;
 
@@ -101,25 +87,11 @@ public class MainMenu {
                 ReturnBookResult returnResult = libraryService.returnBook(isbn, copies);
 
                 switch (returnResult) {
-                    case SUCCESS:
-                        System.out.println("Book returned successfully.");
-                        break;
-
-                    case BOOK_NOT_FOUND:
-                        System.out.println("Book not found.");
-                        break;
-
-                    case INVALID_ISBN:
-                        System.out.println("Invalid ISBN.");
-                        break;
-
-                    case INVALID_COPIES:
-                        System.out.println("Invalid number of copies.");
-                        break;
-
-                    case UPDATE_FAILED:
-                        System.out.println("Unable to update book.");
-                        break;
+                    case SUCCESS -> System.out.println("Book returned successfully.");
+                    case BOOK_NOT_FOUND -> System.out.println("Book not found.");
+                    case INVALID_ISBN -> System.out.println("Invalid ISBN.");
+                    case INVALID_COPIES -> System.out.println("Invalid number of copies.");
+                    case UPDATE_FAILED -> System.out.println("Unable to update book.");
                 }
 
                 return true;
